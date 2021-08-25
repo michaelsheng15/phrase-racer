@@ -1,8 +1,12 @@
-const api = "https://random-words-api.vercel.app/word";
+const api = "https://random-word-api.herokuapp.com//word?number=1";
 const wordDisplay = document.getElementById("word");
 const userInput = document.getElementById("input");
 const score = document.getElementById("scoreDisplay");
+const startButton = document.getElementById("startGameButton");
+const timer = document.getElementById("countdown");
 
+let isPlaying = false;
+let countdown = 5;
 let scoreVal = 0;
 
 userInput.addEventListener("input", () => {
@@ -23,25 +27,30 @@ userInput.addEventListener("input", () => {
     } else if (character === characterSpan.innerText) {
       characterSpan.classList.add("correct");
       characterSpan.classList.remove("incorrect");
-      renderNewQuote();
-      scoreVal++;
-      score.innerHTML = scoreVal - 1;
     } else {
       characterSpan.classList.remove("correct");
       characterSpan.classList.add("incorrect");
       correct = false;
     }
   });
+
+  if (correct) {
+    renderNewQuote();
+    scoreVal++;
+    score.innerHTML = scoreVal;
+  }
+
 });
 
 function getRandomQuote() {
   return fetch(api)
     .then((response) => response.json())
-    .then((data) => data[0].word);
+    .then((data) => data[0]);
 }
 
 async function renderNewQuote() {
   const word = await getRandomQuote();
+  console.log(word);
   wordDisplay.innerHTML = "";
   //splitting the word into
   word.split("").forEach((character) => {
@@ -52,7 +61,37 @@ async function renderNewQuote() {
     //Setting the word display by adding all the spans together to reform the word
     wordDisplay.appendChild(characterSpan);
   });
+  console.log(wordDisplay);
 
   //everytime a new word generates, we clear the user textbox
   userInput.value = null;
 }
+
+const startCountdownTimer = () => {
+  userInput.disabled = true;
+
+  let startCountdown = setInterval(() => {
+    if (countdown <= 0) {
+      // console.log("countdown finished");
+      renderGame();
+      clearInterval(startCountdown);
+    }
+
+    timer.innerHTML = countdown;
+    countdown--;
+  }, 1000);
+};
+
+startButton.addEventListener("click", async () => {
+  console.log("pressed");
+  startButton.setAttribute("disabled", "disabled");
+  startCountdownTimer();
+});
+
+const renderGame = () => {
+  userInput.disabled = false;
+  userInput.focus();
+  timer.remove();
+  startButton.remove();
+  renderNewQuote();
+};
