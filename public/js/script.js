@@ -1,4 +1,6 @@
+const socket = io();
 const api = "https://random-word-api.herokuapp.com//word?number=1";
+
 const wordDisplay = document.getElementById("word");
 const userInput = document.getElementById("input");
 const score = document.getElementById("scoreDisplay");
@@ -68,7 +70,6 @@ async function renderNewQuote() {
 }
 
 const startCountdownTimer = () => {
-  userInput.disabled = true;
 
   let startCountdown = setInterval(() => {
     if (countdown <= 0) {
@@ -82,16 +83,23 @@ const startCountdownTimer = () => {
   }, 1000);
 };
 
+userInput.style.visibility = 'hidden'
 startButton.addEventListener("click", async () => {
   console.log("pressed");
   startButton.setAttribute("disabled", "disabled");
+  startButton.style.visibility = 'hidden'
   startCountdownTimer();
 });
 
 const renderGame = () => {
-  userInput.disabled = false;
+  userInput.style.visibility = 'visible'
+  score.style.visibility = 'visibile'
   userInput.focus();
   timer.remove();
   startButton.remove();
   renderNewQuote();
 };
+
+socket.on('welcome', (message) => {
+  console.log(message);
+})

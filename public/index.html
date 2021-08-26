@@ -2,18 +2,24 @@
 
 <html>
   <head>
+    <title>Chat App</title>
     <link rel="stylesheet" href="/css/styles.css" />
-    <script src="./js/script.js" defer></script>
   </head>
-  <body>
-    <body>
-      <div class="container">
-        <div id="word"></div>
-        <textarea id="input"  autofocus></textarea>
-        <div id="scoreDisplay"></div>
-        <button id="startGameButton">Start Game</button>
-        <div id="countdown"></div>
 
+  <body>
+    <div class="centered-form">
+      <div class="centered-form__box">
+        <h1>Join</h1>
+        <form action="/game.html">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Username" >
+          <label>Room</label>
+          <input type="text" name="room" placeholder="Room" >
+          <button class="homeJoin">Join!</button>
+        </form>
       </div>
-    </body>
+
+    </div>
+    
+  </body>
 </html>
