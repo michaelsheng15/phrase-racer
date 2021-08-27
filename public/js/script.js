@@ -5,7 +5,9 @@ const wordDisplay = document.getElementById("word");
 const userInput = document.getElementById("input");
 const score = document.getElementById("scoreDisplay");
 const startButton = document.getElementById("startGameButton");
-const timer = document.getElementById("countdown");
+const startTimer = document.getElementById("countdown");
+
+const timerElement = document.getElementById('timer')
 
 let isPlaying = false;
 let countdown = 5;
@@ -39,9 +41,9 @@ userInput.addEventListener("input", () => {
   if (correct) {
     renderNewQuote();
     scoreVal++;
-    score.innerHTML = scoreVal;
+    score.innerHTML = "Score: " + scoreVal;
+    socket.emit("scoreUpdate", scoreVal)
   }
-
 });
 
 function getRandomQuote() {
@@ -70,7 +72,7 @@ async function renderNewQuote() {
 }
 
 const startCountdownTimer = () => {
-
+  console.log("5 second timer started");
   let startCountdown = setInterval(() => {
     if (countdown <= 0) {
       // console.log("countdown finished");
@@ -78,28 +80,66 @@ const startCountdownTimer = () => {
       clearInterval(startCountdown);
     }
 
-    timer.innerHTML = countdown;
+    startTimer.innerHTML = countdown;
     countdown--;
   }, 1000);
 };
 
-userInput.style.visibility = 'hidden'
-startButton.addEventListener("click", async () => {
+userInput.style.visibility = "hidden";
+
+startButton.addEventListener("click", () => {
   console.log("pressed");
+  userInput.removeAttribute("disabled", "disabled");
+  scoreVal = 0
   startButton.setAttribute("disabled", "disabled");
-  startButton.style.visibility = 'hidden'
+  startButton.style.visibility = "hidden";
   startCountdownTimer();
 });
 
 const renderGame = () => {
-  userInput.style.visibility = 'visible'
-  score.style.visibility = 'visibile'
+  userInput.style.visibility = "visible";
+  score.style.visibility = "visibile";
+  startButton.style.visibility = "hidden";
   userInput.focus();
-  timer.remove();
-  startButton.remove();
+  startTimer.remove();
   renderNewQuote();
+  startGameTimer()
 };
 
-socket.on('welcome', (message) => {
-  console.log(message);
+let startTime
+const startGameTimer = () => {
+  timerElement.innerText = 0
+  startTime = new Date()
+  let gameCountdown = setInterval(() => {
+    timer.innerText = "Time Left: " + getTimerTime()
+
+    if(getTimerTime() <= 0){
+      clearInterval(gameCountdown)
+      endGame()
+    }
+  }, 1000)
+}
+
+const getTimerTime = () => {
+  return Math.floor(32 - (new Date() - startTime) / 1000)
+}
+
+const endGame = () =>{
+  userInput.setAttribute('disabled', 'disabled')
+  startButton.removeAttribute("disabled", "disabled");
+
+  startButton.style.visibility = "visible";
+  wordDisplay.innerHTML = "Your Score: " + scoreVal
+  score.innerHTML = null
+  timer.innerText = null
+ 
+
+}
+
+socket.on("updateOpponentScore", (score)=>{
+  console.log("Opponents Score: " + score);
 })
+
+socket.on("welcome", (message) => {
+  console.log(message);
+});

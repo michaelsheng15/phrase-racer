@@ -18,6 +18,10 @@ io.on('connection', (socket)=>{
 
     socket.emit('welcome', 'Welcome to game room')
 
+    socket.on("scoreUpdate", (score)=>{
+        socket.broadcast.emit("updateOpponentScore", score)
+    })
+
 })
 
 server.listen(port, ()=>{
