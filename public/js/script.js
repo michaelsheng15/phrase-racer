@@ -4,10 +4,11 @@ const api = "https://random-word-api.herokuapp.com//word?number=1";
 const wordDisplay = document.getElementById("word");
 const userInput = document.getElementById("input");
 const score = document.getElementById("scoreDisplay");
+const oppScore = document.getElementById("opponentScoreDisplay");
 const startButton = document.getElementById("startGameButton");
 const startTimer = document.getElementById("countdown");
 
-const timerElement = document.getElementById('timer')
+const timerElement = document.getElementById("timer");
 
 let isPlaying = false;
 let countdown = 5;
@@ -41,8 +42,8 @@ userInput.addEventListener("input", () => {
   if (correct) {
     renderNewQuote();
     scoreVal++;
-    score.innerHTML = "Score: " + scoreVal;
-    socket.emit("scoreUpdate", scoreVal)
+    score.innerHTML = "Your Score: " + scoreVal;
+    socket.emit("scoreUpdate", scoreVal);
   }
 });
 
@@ -88,13 +89,21 @@ const startCountdownTimer = () => {
 userInput.style.visibility = "hidden";
 
 startButton.addEventListener("click", () => {
+  socket.emit("startGame", "init");
+});
+
+socket.on("init", () => {
+  startGame();
+});
+
+const startGame = () => {
   console.log("pressed");
   userInput.removeAttribute("disabled", "disabled");
-  scoreVal = 0
+  scoreVal = 0;
   startButton.setAttribute("disabled", "disabled");
   startButton.style.visibility = "hidden";
   startCountdownTimer();
-});
+};
 
 const renderGame = () => {
   userInput.style.visibility = "visible";
@@ -103,43 +112,49 @@ const renderGame = () => {
   userInput.focus();
   startTimer.remove();
   renderNewQuote();
-  startGameTimer()
+  startGameTimer();
 };
 
-let startTime
+let startTime;
 const startGameTimer = () => {
-  timerElement.innerText = 0
-  startTime = new Date()
+  timerElement.innerText = 0;
+  startTime = new Date();
   let gameCountdown = setInterval(() => {
-    timer.innerText = "Time Left: " + getTimerTime()
+    timer.innerText = "Time Left: " + getTimerTime();
 
-    if(getTimerTime() <= 0){
-      clearInterval(gameCountdown)
-      endGame()
+    if (getTimerTime() <= 0) {
+      clearInterval(gameCountdown);
+      endGame();
     }
-  }, 1000)
-}
+  }, 1000);
+};
 
 const getTimerTime = () => {
-  return Math.floor(32 - (new Date() - startTime) / 1000)
-}
+  return Math.floor(32 - (new Date() - startTime) / 1000);
+};
 
-const endGame = () =>{
-  userInput.setAttribute('disabled', 'disabled')
+const endGame = () => {
+  userInput.setAttribute("disabled", "disabled");
   startButton.removeAttribute("disabled", "disabled");
 
   startButton.style.visibility = "visible";
-  wordDisplay.innerHTML = "Your Score: " + scoreVal
-  score.innerHTML = null
-  timer.innerText = null
- 
+  wordDisplay.innerHTML = "Your Score: " + scoreVal;
+  score.innerHTML = null;
+  timer.innerText = null;
+};
 
-}
-
-socket.on("updateOpponentScore", (score)=>{
+socket.on("updateOpponentScore", (score) => {
   console.log("Opponents Score: " + score);
-})
+  oppScore.innerHTML = "Opponent's Score: " + score;
+});
 
 socket.on("welcome", (message) => {
   console.log(message);
 });
+
+// socket.emit("join", { username, room }, (error) => {
+//   if (error) {
+//     alert(error); //sends users back to home if error
+//     location.href = "/";
+//   }
+// });

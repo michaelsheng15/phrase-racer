@@ -12,15 +12,25 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
+const roomName = ""
+
 
 io.on('connection', (socket)=>{
+
+   
+
     console.log('new websocket connection');
 
     socket.emit('welcome', 'Welcome to game room')
 
+
     socket.on("scoreUpdate", (score)=>{
         socket.broadcast.emit("updateOpponentScore", score)
     })
+
+   socket.on("startGame" , (text) => {
+       io.emit('init', text)
+   })
 
 })
 
