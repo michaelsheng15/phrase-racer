@@ -33,6 +33,7 @@ button {
   font-style: bold;
   border-radius: 10px;
   border: none;
+  margin-bottom: 10px;
 }
 
 /* join page */
@@ -86,3 +87,60 @@ button {
 }
 
 /* game screen */
+
+/* chat section */
+
+.chat__main {
+  flex-grow: 1;
+  position: absolute;
+  left: 80%;
+  top: 45%;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  border: blue 3px solid;
+  background-color: rgba(205, 205, 255, 0.261);
+  border-radius: 10px;
+}
+
+.chat__messages {
+  flex-grow: 1;
+  padding: 24px 24px 0px 24px;
+  overflow-y: scroll;
+}
+
+.message {
+  margin-bottom: 16px;   
+  text-align: left;
+}
+
+.message__name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.compose {
+  display: flex;
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding: 24px;
+}
+
+.compose form {
+  display: flex;
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+.compose input {
+  border: 1px solid #eeeeee;
+  width: 100%;
+  padding: 12px;
+  margin: 0 16px 0 0;
+  flex-grow: 1;
+}
+
+.compose button {
+  font-size: 14px;
+}

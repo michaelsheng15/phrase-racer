@@ -6,6 +6,7 @@ const userInput = document.getElementById("input");
 const score = document.getElementById("scoreDisplay");
 const oppScore = document.getElementById("opponentScoreDisplay");
 const startButton = document.getElementById("startGameButton");
+const homeButton = document.getElementById('homeButton')
 const startTimer = document.getElementById("countdown");
 
 const timerElement = document.getElementById("timer");
@@ -13,6 +14,10 @@ const timerElement = document.getElementById("timer");
 let isPlaying = false;
 let countdown = 5;
 let scoreVal = 0;
+
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
 
 userInput.addEventListener("input", () => {
   const targetWordCharArray = wordDisplay.querySelectorAll("span");
@@ -92,6 +97,7 @@ startButton.addEventListener("click", () => {
   socket.emit("startGame", "init");
 });
 
+
 socket.on("init", () => {
   startGame();
 });
@@ -102,6 +108,7 @@ const startGame = () => {
   scoreVal = 0;
   startButton.setAttribute("disabled", "disabled");
   startButton.style.visibility = "hidden";
+  homeButton.style.visibility = "hidden"
   startCountdownTimer();
 };
 
@@ -138,6 +145,8 @@ const endGame = () => {
   startButton.removeAttribute("disabled", "disabled");
 
   startButton.style.visibility = "visible";
+  homeButton.style.visibility = "visible"
+
   wordDisplay.innerHTML = "Your Score: " + scoreVal;
   score.innerHTML = null;
   timer.innerText = null;
@@ -152,9 +161,54 @@ socket.on("welcome", (message) => {
   console.log(message);
 });
 
-// socket.emit("join", { username, room }, (error) => {
-//   if (error) {
-//     alert(error); //sends users back to home if error
-//     location.href = "/";
-//   }
-// });
+
+
+socket.emit("join", { username, room }, (error) => {
+  if (error) {
+    alert(error); //sends users back to home if error
+    location.href = "/";
+  }
+});
+
+
+//Chat logic
+const $messageForm = document.querySelector("#message-form");
+const $messageFormInput = $messageForm.querySelector("input");
+const $messageFormButton = $messageForm.querySelector("button");
+
+const $messages = document.querySelector("#messages"); //div where messages are rendered
+const messageTemplate = document.querySelector("#message-template").innerHTML;
+
+$messageForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  //disabled send button here since client has just pressed send
+  $messageFormButton.setAttribute("disabled", "disabled");
+
+  const message = e.target.elements.message.value;
+  socket.emit("sendMessage", message, (error) => {
+    //re-enable
+    $messageFormButton.removeAttribute("disabled");
+
+    //clear textbox ince sent
+    $messageFormInput.value = "";
+
+    //brings cursor back to input box
+    $messageFormInput.focus();
+
+    if (error) {
+      return console.log(error);
+    }
+
+    console.log("Message delivered");
+  });
+});
+
+socket.on("message", (message, username) => {
+  console.log(message);
+  const html = Mustache.render(messageTemplate, {
+    username: username,
+    message: message, //passing the data into template
+  });
+  $messages.insertAdjacentHTML("beforeend", html);
+});

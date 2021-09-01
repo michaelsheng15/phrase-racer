@@ -12,25 +12,38 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
-const roomName = ""
+let roomName = ""
+let playerName = ""
 
 
 io.on('connection', (socket)=>{
 
-   
+    socket.on('join', ({username, room})=>{
+        socket.join(room)
+        roomName = room
+        playerName = username
+    })
+
+    console.log(roomName);
 
     console.log('new websocket connection');
 
-    socket.emit('welcome', 'Welcome to game room')
+    socket.to(roomName).emit('welcome', 'Welcome to game room')
 
 
     socket.on("scoreUpdate", (score)=>{
-        socket.broadcast.emit("updateOpponentScore", score)
+        socket.broadcast.to(roomName).emit("updateOpponentScore", score)
     })
 
    socket.on("startGame" , (text) => {
-       io.emit('init', text)
+       io.to(roomName).emit('init', text)
    })
+
+
+   socket.on("sendMessage", (message, callback) => {
+    io.to(roomName).emit("message", message, playerName);
+    callback();
+  });
 
 })
 
