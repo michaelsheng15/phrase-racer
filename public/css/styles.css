@@ -10,7 +10,8 @@
 body {
   line-height: 1.4;
   color: #333333;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Rubik', sans-serif;  
+  background-color: #EFF7FB;
 }
 
 textarea {
@@ -33,7 +34,8 @@ button {
   font-style: bold;
   border-radius: 10px;
   border: none;
-  margin-bottom: 10px;
+  background-color: #1844d6;
+  color: white;
 }
 
 /* join page */
@@ -46,10 +48,12 @@ button {
 }
 
 .centered-form__box {
-  box-shadow: 0px 0px 17px 1px #838383;
-  background: #f7f7fa;
+  /* box-shadow: 0px 0px 17px 1px #838383; */
+  background: #ffffffb4;
+  border: white solid 1px;
   padding: 24px;
   width: 250px;
+  border-radius: 20px;
 }
 
 .centered-form button {
@@ -64,7 +68,7 @@ button {
 .homeJoin{
   cursor: pointer;
   padding: 12px;
-  background: #7C5CBF;
+  background: #1844d6;
   border: none;
   color: white;
   font-size: 16px;
@@ -78,7 +82,7 @@ button {
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  height: 100vh;
+  height: 95vh;
 }
 
 #countdown {
@@ -89,6 +93,9 @@ button {
 /* game screen */
 
 /* chat section */
+#startGameButton{
+  margin-bottom: 20px;
+}
 
 .chat__main {
   flex-grow: 1;
@@ -98,8 +105,8 @@ button {
   display: flex;
   flex-direction: column;
   height: 50vh;
-  border: blue 3px solid;
-  background-color: rgba(205, 205, 255, 0.261);
+  background-color: #ffffffb4;
+  border: 2px solid #EFF7FB;
   border-radius: 10px;
 }
 
@@ -144,3 +151,11 @@ button {
 .compose button {
   font-size: 14px;
 }
+
+.centered-form__box input{
+  padding: 10px 0px 10px 3px;
+  border-radius: 5px;
+  border: 1px solid #ffffff8c;
+}
+
+

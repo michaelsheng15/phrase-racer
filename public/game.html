@@ -4,6 +4,12 @@
   <head>
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="./js/script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
@@ -17,8 +23,13 @@
       </div>
       <div id="countdown"></div>
       <button id="startGameButton">Start Game</button>
-      <button id="homeButton" onclick="location.href='/index.html'" type="button">New Room</button>
-
+      <button
+        id="homeButton"
+        onclick="location.href='/index.html'"
+        type="button"
+      >
+        New Room
+      </button>
 
       <div class="chat__main">
         <div id="messages" class="chat__messages"></div>
@@ -26,7 +37,7 @@
           <form id="message-form">
             <input
               placeholder="message"
-              name="message"
+              name="Message"
               required
               autocomplete="off"
             />

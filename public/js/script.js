@@ -185,7 +185,9 @@ $messageForm.addEventListener("submit", (e) => {
   //disabled send button here since client has just pressed send
   $messageFormButton.setAttribute("disabled", "disabled");
 
-  const message = e.target.elements.message.value;
+  console.log(e);
+
+  const message = e.target.elements.Message.value;
   socket.emit("sendMessage", message, (error) => {
     //re-enable
     $messageFormButton.removeAttribute("disabled");
