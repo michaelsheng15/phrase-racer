@@ -37,6 +37,8 @@ button {
   border: none;
   background-color: #1844d6;
   color: white;
+  font-family: 'Rubik', sans-serif;  
+
 }
 
 /* join page */
@@ -50,7 +52,7 @@ button {
 
 .centered-form__box {
   /* box-shadow: 0px 0px 17px 1px #838383; */
-  background: #ffffffb4;
+  background: #ffffffc7;
   border: white solid 1px;
   padding: 24px;
   width: 250px;
@@ -73,7 +75,6 @@ button {
   border: none;
   color: white;
   font-size: 16px;
-  transition: background .3s ease;
 }
 
 /* pregame screen */
